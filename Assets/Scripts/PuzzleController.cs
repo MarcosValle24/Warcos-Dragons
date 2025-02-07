@@ -5,6 +5,7 @@ using System.Linq;
 
 public class PuzzleController : MonoBehaviour
 {
+    public static PuzzleController instance { get; private set; }
     Tile[,] grid;
 
     [SerializeField]
@@ -20,9 +21,6 @@ public class PuzzleController : MonoBehaviour
 
     [SerializeField]
     GameObject ghostObj;
-
-    GameManager gameM;
-
     bool canMove = false;
     bool fast = true;
 
@@ -31,11 +29,19 @@ public class PuzzleController : MonoBehaviour
 
     Vector3 temp;
 
-    private void Start()
+    void Awake()
     {
-        gameM = GetComponent<GameManager>();
+        if (instance != this && instance != null)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            instance = this;
+        }
     }
 
+    //Start Puzzle
     public void StartPuzzle()
     {
 
@@ -44,7 +50,7 @@ public class PuzzleController : MonoBehaviour
         types.Add("Blue");
         types.Add("Red");
 
-        grid = new Tile[sizeX, sizeY * 2];
+        grid = new Tile[sizeX, sizeY*2];
         for (int i = 0; i < sizeX; i++)
         {
             for (int j = 0; j < sizeY; j++)
@@ -73,8 +79,10 @@ public class PuzzleController : MonoBehaviour
         dragX = tile.xPos;
         dragY = tile.yPos;
         ghostObj.SetActive(true);
-        ghostObj.GetComponent<SpriteRenderer>().color = new Color( tile.render.color.r, tile.render.color.g, tile.render.color.b,.75f);
-        //Debug.Log(tile.render.color);
+        ghostObj.GetComponent<SpriteRenderer>().color = new Color( tile.GetComponent<SpriteRenderer>().color.r,
+                                                                    tile.GetComponent<SpriteRenderer>().color.g,
+                                                                    tile.GetComponent<SpriteRenderer>().color.b,.75f);
+       
     }
 
     public void DropTile(Tile tile)
@@ -136,7 +144,6 @@ public class PuzzleController : MonoBehaviour
                     totals[2] = Tile.Count();
                 else if (Tile.Key.ToString() == types[3])
                     totals[3] = Tile.Count();
-               // Debug.Log("Type: " + Tile.Key + Tile.Count());
             }
         }
 
@@ -153,8 +160,6 @@ public class PuzzleController : MonoBehaviour
             StartCoroutine(Gravity());
         else
         {
-            gameM.getTotals(totals);
-            gameM.AddTurn();
             canMove = true;
             for (int i = 0; i < totals.Count(); i++)
             {
@@ -281,10 +286,11 @@ public class PuzzleController : MonoBehaviour
             grid[xPos2, yPos2].ChangePosition(xPos2, yPos2);
     }
 
+    //Create New Tile
     void CreateTile(int x, int y)
     {
-        Tile newTile = Instantiate(tilesPrefab[Random.Range(0, tilesPrefab.Length)], new Vector2(x, y), Quaternion.identity, transform);
-        newTile.Constructor(this, x, y);
+        Tile newTile = Instantiate(tilesPrefab[Random.Range(0, tilesPrefab.Length)], new Vector2(x, y), Quaternion.identity);
+        newTile.ChangePosition( x, y);
         grid[x, y] = newTile;
     }
 }

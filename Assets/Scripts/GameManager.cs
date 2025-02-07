@@ -2,15 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Linq;
 using TMPro;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-
-
-
     PuzzleController PuzzleC;
     EnemyManager _EM;
 
@@ -134,7 +130,6 @@ public class GameManager : MonoBehaviour
     public void AddTurn()
     {
         turn++;
-        //Debug.Log(turn);
         if (turn > 0)
         {
             _EM.TakeTurn();
