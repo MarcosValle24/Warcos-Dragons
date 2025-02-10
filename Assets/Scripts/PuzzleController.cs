@@ -238,7 +238,7 @@ public class PuzzleController : MonoBehaviour
         }
         return TilesToReturn;
     }
-
+    
     List<Tile> CheckHorizontalMatches()
     {
         List<Tile> TilesToCheck = new List<Tile>();
