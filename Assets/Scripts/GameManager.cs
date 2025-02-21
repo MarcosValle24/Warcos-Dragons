@@ -7,17 +7,14 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    PuzzleController PuzzleC;
+    public static GameManager Instance {get; private set;}
+    
     EnemyManager _EM;
 
-    [SerializeField]
-    int[] totalAtacks = new int[4];
-
-    [SerializeField]
-    Slider healthBar;
-
-    [SerializeField]
-    GameObject changeLevelText;
+    [SerializeField] Slider healthBar;
+    [SerializeField] private TMP_Text[] pointsTexts;
+    [SerializeField] GameObject changeLevelText;
+    
 
     private int life;
     private static int turn;
@@ -25,9 +22,26 @@ public class GameManager : MonoBehaviour
 
     private int atackValue;
     private bool stillAllive;
+    
+    private int redScore = 0;
+    private int blueScore = 0;
+    private int greenScore = 0;
+    private int whiteScore = 0;
 
+    //[serializeField] private TMPro_Text[] fluidsScore;
 
-
+    void Awake()
+    {
+        if (Instance != this && Instance != null)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
+    
     int GetTurn()
     {
         return turn;
@@ -39,9 +53,10 @@ public class GameManager : MonoBehaviour
         atackValue = 1;
         level = 1;
         stillAllive = true;
-        PuzzleC = GetComponent<PuzzleController>();
+        //PuzzleC = GetComponent<PuzzleController>();
         _EM = GetComponent<EnemyManager>();
-        PuzzleC.StartPuzzle();
+        //PuzzleC.StartPuzzle();
+        PuzzleController.Instance.StartPuzzle();
         _EM.CallNewMinions();
 
         life = 250;
@@ -90,7 +105,7 @@ public class GameManager : MonoBehaviour
     {
         if (turn < 0)
             return;
-        totalAtacks = totalsArray;
+        //totalAtacks = totalsArray;
 
         if (healthBar.value < healthBar.maxValue)
         {
@@ -135,5 +150,21 @@ public class GameManager : MonoBehaviour
             _EM.TakeTurn();
         }
     }
-    
+
+    public void AddPoints(int redvalue, int bluevalue, int greenvalue, int whitevalue)
+    {
+        redScore+=redvalue;
+        pointsTexts[0].text = redScore.ToString();
+        blueScore+=bluevalue;
+        pointsTexts[1].text = blueScore.ToString();
+        greenScore+=greenvalue;
+        pointsTexts[2].text = greenScore.ToString();
+        whiteScore += whitevalue;
+        pointsTexts[3].text = whiteScore.ToString();
+    }
+
+    public float GetRedScore()
+    {
+        return (float)redScore;    
+    }
 }

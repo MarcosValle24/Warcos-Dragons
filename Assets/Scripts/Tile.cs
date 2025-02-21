@@ -15,14 +15,14 @@ public class Tile : MonoBehaviour
     //Unity Function For Mouse Down
     private void OnMouseDown()
     {
-        PuzzleController.instance.DragTile(this);
+        PuzzleController.Instance.DragTile(this);
     }
     //Unity Function For Mouse Over
     private void OnMouseOver()
     {
         if (Input.GetMouseButtonUp(0))
         {
-            PuzzleController.instance.DropTile(this);
+            PuzzleController.Instance.DropTile(this);
         }
     }
 }

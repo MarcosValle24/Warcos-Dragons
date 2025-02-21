@@ -5,7 +5,7 @@ using System.Linq;
 
 public class PuzzleController : MonoBehaviour
 {
-    public static PuzzleController instance { get; private set; }
+    public static PuzzleController Instance { get; private set; }
     Tile[,] grid;
 
     [SerializeField]
@@ -31,13 +31,13 @@ public class PuzzleController : MonoBehaviour
 
     void Awake()
     {
-        if (instance != this && instance != null)
+        if (Instance != this && Instance != null)
         {
             Destroy(this);
         }
         else
         {
-            instance = this;
+            Instance = this;
         }
     }
 
@@ -147,15 +147,38 @@ public class PuzzleController : MonoBehaviour
             }
         }
 
+        int red = 0;
+        int blue = 0;
+        int green = 0;
+        int white = 0;
         for (int i = 0; i < TilesToDestroy.Count; i++)
         {
+           
+            
             if (TilesToDestroy[i] != null)
             {
+                switch (TilesToDestroy[i].type)
+                {
+                    case "White":
+                        white++;
+                        break;
+                    case "Green":
+                        green++;
+                        break;
+                    case "Blue":
+                        blue++;
+                        break;
+                    case "Red":
+                        red++;
+                        break;
+                }
+                
                 Destroy(TilesToDestroy[i].gameObject);
+                
                 CreateTile(TilesToDestroy[i].xPos, TilesToDestroy[i].yPos + sizeY);
             }
         }
-
+        GameManager.Instance.AddPoints(red, blue, green, white);
         if (!sw)
             StartCoroutine(Gravity());
         else
