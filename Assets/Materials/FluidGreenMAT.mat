@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: FluidMAT
+  m_Name: FluidGreenMAT
   m_Shader: {fileID: -6465566751694194690, guid: a3a65df62748448ec9d00d7465fabfba,
     type: 3}
   m_Parent: {fileID: 0}
@@ -69,9 +69,9 @@ Material:
     m_Floats:
     - _EnableExternalAlpha: 0
     - _ZWrite: 0
-    - _value: 0.29999995
+    - _value: -0.44
     m_Colors:
-    - _BaseColor: {r: 1, g: 0, b: 0, a: 1}
+    - _BaseColor: {r: 0.10196079, g: 0.83921576, b: 0, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

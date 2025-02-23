@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,22 +8,15 @@ using TMPro;
 
 public class CurrentEnemy : MonoBehaviour
 {
-    [SerializeField]
-    private Image sprite;
+    [SerializeField] private Image sprite;
 
-    [SerializeField]
-    private Slider lifeSlider;
+    [SerializeField] private Slider lifeSlider;
 
-    [SerializeField]
-    private TMP_Text turnText;
+    [SerializeField] private TMP_Text turnText;
 
-    [SerializeField]
-    private GameManager _GM;
+    [SerializeField] private Image enemySelected;
 
-   public int maxTurns;
-
-    public string name;
-    public int value;
+   private int maxTurns;
 
     private int currentTurns;
 
@@ -32,71 +26,66 @@ public class CurrentEnemy : MonoBehaviour
 
     private static int attackPower;
 
+    private int indexValue;
 
-    public void Init(Sprite NewSprite, int TotalLife, int MaxTurns, int atack, string Name)
+//Init Enemy obj and set values
+    public void Init(Sprite NewSprite, int TotalLife, int MaxTurns, int attack, int indexvalue)
     {
         sprite.sprite = NewSprite;
         totalLife = TotalLife;
         currentLife = totalLife;
         maxTurns = MaxTurns;
         currentTurns = MaxTurns;
-        attackPower = atack;
-        name = Name;
+        attackPower = attack;
+        indexValue = indexvalue;
 
         lifeSlider.maxValue = TotalLife;
         lifeSlider.value = TotalLife;
         turnText.text = currentTurns.ToString();
-        _GM = GameObject.Find("Game Manager").GetComponent<GameManager>();
-
+        enemySelected.gameObject.SetActive(false);
     }
 
     private void Update()
     {
-        if(currentTurns == 0)
-        {
-            currentTurns = maxTurns;
-            Hit();   
-        }
-    }
-
-    void Hit()
-    {
-
-        StartCoroutine(resetTurns());
-
-    }
+        
+    } 
+    //decrease the turn of enemy
     public void takeTurn()
     {
         currentTurns-=1;
         turnText.text = currentTurns.ToString();
-        value -= 1;
-        
     }
-
+//Get hit to enemy
     public void GetHit(int value)
     {
         currentLife -= value;
         lifeSlider.value = currentLife;
-
     }
-
+//Return life of the enemy
     public int GetLife()
     {
         return currentLife;
     }
-
-   public IEnumerator Death()
+//disable current enemy
+    public void IsDead()
     {
-        yield return new WaitForSeconds(1);
-        Destroy(this.gameObject);
+        gameObject.SetActive(false);
+    }
+   
+
+    public void EnemySelection()
+    {
+            EnemyManager.Instance.UpdateSelectedEnemy(indexValue);
     }
 
-        IEnumerator resetTurns()
+    public void SelectEnemy()
     {
-            _GM.GetHit(attackPower);
-        
-        yield return new WaitForSeconds(1);
-        
-        turnText.text = currentTurns.ToString();
+        enemySelected.gameObject.SetActive(true);
     }
+
+    public void DeselectEnemy()
+    {
+        enemySelected.gameObject.SetActive(false);
+    }
+    
 }

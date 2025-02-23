@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour
     
 
     private int life;
-    private static int turn;
     private static int level;
 
     private int atackValue;
@@ -41,11 +40,6 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
     }
-    
-    int GetTurn()
-    {
-        return turn;
-    }
 
     // Start is called before the first frame update
     void Start()
@@ -53,18 +47,12 @@ public class GameManager : MonoBehaviour
         atackValue = 1;
         level = 1;
         stillAllive = true;
-        //PuzzleC = GetComponent<PuzzleController>();
         _EM = GetComponent<EnemyManager>();
-        //PuzzleC.StartPuzzle();
         PuzzleController.Instance.StartPuzzle();
         _EM.CallNewMinions();
-
         life = 250;
         healthBar.maxValue = life;
         healthBar.value = healthBar.maxValue;
-
-        turn = -1;
-
     }
 
     private void Update()
@@ -73,12 +61,6 @@ public class GameManager : MonoBehaviour
         {
             stillAllive = false;
             StartCoroutine(DeathPlayer());
-        }
-
-        if(_EM.EndLevel == true)
-        {
-            _EM.EndLevel = false;
-            StartCoroutine(ChangeLevel());
         }
     }
 
@@ -103,8 +85,6 @@ public class GameManager : MonoBehaviour
 
     public void getTotals(int[] totalsArray)
     {
-        if (turn < 0)
-            return;
         //totalAtacks = totalsArray;
 
         if (healthBar.value < healthBar.maxValue)
@@ -140,17 +120,8 @@ public class GameManager : MonoBehaviour
         life -= value;
         healthBar.value = life;
     }
-
-
-    public void AddTurn()
-    {
-        turn++;
-        if (turn > 0)
-        {
-            _EM.TakeTurn();
-        }
-    }
-
+   
+//update ColorScore
     public void AddPoints(int redvalue, int bluevalue, int greenvalue, int whitevalue)
     {
         redScore+=redvalue;
@@ -162,9 +133,16 @@ public class GameManager : MonoBehaviour
         whiteScore += whitevalue;
         pointsTexts[3].text = whiteScore.ToString();
     }
-
-    public float GetRedScore()
+//Get color score from index 0=red,1=blue,2=green,3=whirte
+    public float GetScore(int value)
     {
-        return (float)redScore;    
+        if(value == 0)
+            return (float)redScore;
+        else if(value == 1)
+            return (float)blueScore;
+        else if(value == 2)
+            return (float)greenScore;
+        else  
+            return (float)whiteScore;
     }
 }
