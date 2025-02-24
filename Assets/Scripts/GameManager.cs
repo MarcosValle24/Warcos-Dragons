@@ -82,6 +82,7 @@ public class GameManager : MonoBehaviour
             else
             {
                 EnemyManager.Instance.TakeTurn();
+                EnemyManager.Instance.CanAddEnemies();
                 EnemyManager.Instance.HitPlayer();
                 playerTurn = !playerTurn;
                 print("enemy turn");

@@ -19,6 +19,8 @@ public class EnemyManager : MonoBehaviour
     //List of current enemies in screen
     [SerializeField] public List<CurrentEnemy> listOfEnemys;
 
+    [SerializeField] private List<CurrentEnemy> attackList;
+
     [SerializeField] private int indexSelected = 0;
 
     private void Awake()
@@ -67,22 +69,36 @@ public class EnemyManager : MonoBehaviour
 //Decrease a turn to all enemies in list
     public void TakeTurn()
     {
-        for(int i =0;i<listOfEnemys.Count;i++)
+        for (int i = 0; i < listOfEnemys.Count; i++)
         {
             listOfEnemys[i].TakeTurn();
+            if (listOfEnemys[i].GetCanAttack())
+            {
+                attackList.Add(listOfEnemys[i]);
+            }
+        }
+    }
+
+    public void CanAddEnemies()
+    {
+        foreach (var e in listOfEnemys)
+        {
+            if(e.GetCanAttack())
+                attackList.Add(e);
         }
     }
 
     public void HitPlayer()
     {
-        for (int i = 0; i < listOfEnemys.Count; i++)
-        {
-            if (listOfEnemys[i].IsAttacking() != 0)
+        if (attackList.Count == 0)
+            return;
+
+            foreach (var e in attackList)
             {
-                GameManager.Instance.GetHit(listOfEnemys[i].IsAttacking());
+                GameManager.Instance.GetHit(e.IsAttacking());
+                e.ResetTurns();
             }
-                
-        }
+            attackList.Clear();
     }
 
 //Clear enemies list, for debugging or end game

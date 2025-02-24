@@ -17,7 +17,7 @@ public class CurrentEnemy : MonoBehaviour
     [SerializeField] private Image enemySelected;
 
    private int maxTurns;
-
+   
     private int currentTurns;
 
     private  int totalLife;
@@ -27,6 +27,8 @@ public class CurrentEnemy : MonoBehaviour
     private static int attackPower;
 
     private int indexValue;
+[SerializeField]
+    private bool canAttack =false;
 
 //Init Enemy obj and set values
     public void Init(Sprite newSprite, int totalLife, int maxTurns, int attack, int indexvalue)
@@ -45,21 +47,23 @@ public class CurrentEnemy : MonoBehaviour
         enemySelected.gameObject.SetActive(false);
     }
 
-    private void Update()
-    {
-        
-    } 
     //decrease the turn of enemy
     public void TakeTurn()
     {
         currentTurns-=1;
         turnText.text = currentTurns.ToString();
+        if (currentTurns < 0)
+        {
+            canAttack = true;
+        }
         
     }
 
     public void ResetTurns()
     {
         currentTurns = maxTurns;
+        turnText.text = currentTurns.ToString();
+        canAttack = false;
     }
 //Get hit to enemy
     public void GetHit(int value)
@@ -96,6 +100,11 @@ public class CurrentEnemy : MonoBehaviour
     public void DeselectEnemy()
     {
         enemySelected.gameObject.SetActive(false);
+    }
+
+    public bool GetCanAttack()
+    {
+        return canAttack;
     }
     
 }
