@@ -23,7 +23,6 @@ public class UpdateFluidUI : MonoBehaviour
         float val = GameManager.Instance.GetScore(colorVal);
         val = val / 100;
         val = Mathf.Lerp( -0.5f, 0.5f,val);
-        print(val);
         GetComponent<Image>().material.SetFloat("_value",val);
     }
 }

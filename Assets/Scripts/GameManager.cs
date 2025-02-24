@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
 
     private int life;
     private static int level;
+    private bool playerTurn = true;
 
     private int atackValue;
     private bool stillAllive;
@@ -62,6 +63,30 @@ public class GameManager : MonoBehaviour
             stillAllive = false;
             StartCoroutine(DeathPlayer());
         }
+        else
+        {
+            GameLoop();
+        }
+    }
+
+    void GameLoop()
+    {
+        if(!stillAllive)
+            return;
+        else
+        {
+            if (playerTurn)
+            {
+                print("player turn");
+            }
+            else
+            {
+                EnemyManager.Instance.TakeTurn();
+                EnemyManager.Instance.HitPlayer();
+                playerTurn = !playerTurn;
+                print("enemy turn");
+            }
+        }
     }
 
     IEnumerator DeathPlayer()
@@ -82,38 +107,6 @@ public class GameManager : MonoBehaviour
         changeLevelText.SetActive(false);
         _EM.CallNewMinions();
     }
-
-    public void getTotals(int[] totalsArray)
-    {
-        //totalAtacks = totalsArray;
-
-        if (healthBar.value < healthBar.maxValue)
-        {
-            int addHealth = 0;
-            addHealth = totalsArray[0] * atackValue;
-            life += addHealth;
-            healthBar.value = life;
-        }
-
-        int atack1;
-        atack1 = totalsArray[1] * atackValue;
-        Debug.Log("Atack 1: " + atack1);
-
-        int atack2;
-        atack2 = totalsArray[2] * atackValue;
-        Debug.Log("Atack 2: " + atack2);
-
-        int atack3;
-        atack3 = totalsArray[3] * atackValue;
-        Debug.Log("Atack 3: " + atack3);
-
-        int TotalHit;
-        TotalHit = atack1 + atack2 + atack3;
-
-        _EM.HitEnemys(TotalHit);
-
-    }
-
 
    public void GetHit(int value)
     {
@@ -144,5 +137,10 @@ public class GameManager : MonoBehaviour
             return (float)greenScore;
         else  
             return (float)whiteScore;
+    }
+
+    public void SetPlayerTurn(bool value)
+    {
+        playerTurn = value;
     }
 }

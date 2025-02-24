@@ -17,7 +17,7 @@ public class EnemyManager : MonoBehaviour
     //Canvas Conteiner
     [SerializeField] GameObject enemyCanvas;
     //List of current enemies in screen
-    [SerializeField] public List<GameObject> listOfEnemys = new List<GameObject>();
+    [SerializeField] public List<CurrentEnemy> listOfEnemys;
 
     [SerializeField] private int indexSelected = 0;
 
@@ -43,7 +43,7 @@ public class EnemyManager : MonoBehaviour
            // Debug.Log(value);
             GameObject newMinion = Instantiate(enemyPlace, enemyCanvas.transform);
             newMinion.transform.GetComponent<CurrentEnemy>().Init(listOfMinions[value].art,listOfMinions[value].life,listOfMinions[value].turnsToAtack,listOfMinions[value].atack,x);
-            listOfEnemys.Add(newMinion);
+            listOfEnemys.Add(newMinion.GetComponent<CurrentEnemy>());
         }
         
         listOfEnemys[indexSelected].GetComponent<CurrentEnemy>().SelectEnemy();
@@ -53,8 +53,8 @@ public class EnemyManager : MonoBehaviour
     //Hit the enemies
     public void HitEnemys(int value)
     {
-        listOfEnemys[0].GetComponent<CurrentEnemy>().GetHit(value);
-        if (listOfEnemys[0].GetComponent<CurrentEnemy>().GetLife() <= 0)
+        listOfEnemys[0].GetHit(value);
+        if (listOfEnemys[0].GetLife() <= 0)
         {
             //Destroy(listOfEnemys[0]);
             //listOfEnemys.Remove(listOfEnemys[0]);
@@ -69,7 +69,19 @@ public class EnemyManager : MonoBehaviour
     {
         for(int i =0;i<listOfEnemys.Count;i++)
         {
-            listOfEnemys[i].GetComponent<CurrentEnemy>().takeTurn();
+            listOfEnemys[i].TakeTurn();
+        }
+    }
+
+    public void HitPlayer()
+    {
+        for (int i = 0; i < listOfEnemys.Count; i++)
+        {
+            if (listOfEnemys[i].IsAttacking() != 0)
+            {
+                GameManager.Instance.GetHit(listOfEnemys[i].IsAttacking());
+            }
+                
         }
     }
 
@@ -88,9 +100,9 @@ public class EnemyManager : MonoBehaviour
         indexSelected = value;
         for (int i = 0; i < listOfEnemys.Count; i++)
         {
-            listOfEnemys[i].GetComponent<CurrentEnemy>().DeselectEnemy();
+            listOfEnemys[i].DeselectEnemy();
         }
-        listOfEnemys[indexSelected].GetComponent<CurrentEnemy>().SelectEnemy();
+        listOfEnemys[indexSelected].SelectEnemy();
         
     }
 

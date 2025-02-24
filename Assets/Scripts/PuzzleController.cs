@@ -188,6 +188,7 @@ public class PuzzleController : MonoBehaviour
             {
                 totals[i] = 0;
             }
+            GameManager.Instance.SetPlayerTurn(false);
         }
     }
 

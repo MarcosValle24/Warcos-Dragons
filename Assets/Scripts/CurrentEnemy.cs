@@ -20,7 +20,7 @@ public class CurrentEnemy : MonoBehaviour
 
     private int currentTurns;
 
-    private static int totalLife;
+    private  int totalLife;
 
     private int currentLife;
 
@@ -29,18 +29,18 @@ public class CurrentEnemy : MonoBehaviour
     private int indexValue;
 
 //Init Enemy obj and set values
-    public void Init(Sprite NewSprite, int TotalLife, int MaxTurns, int attack, int indexvalue)
+    public void Init(Sprite newSprite, int totalLife, int maxTurns, int attack, int indexvalue)
     {
-        sprite.sprite = NewSprite;
-        totalLife = TotalLife;
+        sprite.sprite = newSprite;
+        this.totalLife = totalLife;
         currentLife = totalLife;
-        maxTurns = MaxTurns;
-        currentTurns = MaxTurns;
+        this.maxTurns = maxTurns;
+        currentTurns = maxTurns;
         attackPower = attack;
         indexValue = indexvalue;
 
-        lifeSlider.maxValue = TotalLife;
-        lifeSlider.value = TotalLife;
+        lifeSlider.maxValue = totalLife;
+        lifeSlider.value = totalLife;
         turnText.text = currentTurns.ToString();
         enemySelected.gameObject.SetActive(false);
     }
@@ -50,10 +50,16 @@ public class CurrentEnemy : MonoBehaviour
         
     } 
     //decrease the turn of enemy
-    public void takeTurn()
+    public void TakeTurn()
     {
         currentTurns-=1;
         turnText.text = currentTurns.ToString();
+        
+    }
+
+    public void ResetTurns()
+    {
+        currentTurns = maxTurns;
     }
 //Get hit to enemy
     public void GetHit(int value)
@@ -71,11 +77,15 @@ public class CurrentEnemy : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
-   
+
+    public int IsAttacking()
+    {
+        return attackPower;
+    }
 
     public void EnemySelection()
-    {
-            EnemyManager.Instance.UpdateSelectedEnemy(indexValue);
+    { 
+        EnemyManager.Instance.UpdateSelectedEnemy(indexValue);
     }
 
     public void SelectEnemy()
